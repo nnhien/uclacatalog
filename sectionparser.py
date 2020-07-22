@@ -27,7 +27,8 @@ def parse_sections(sections_soup) -> List[Section]:
     return out
 
 def _parse_id(section, section_soup):
-    section.id = section_soup.div['id'].split("_")[0] # ID Attribute is in format of ID_subjAreaCLASSNUM; we want to split at '_' and take the first element
+    # ID Attribute is in format of ID_subjAreaCLASSNUM; we want to split at '_' and take the first element
+    section.id = section_soup.div['id'].split("_")[0]
 
 def _parse_status(section, section_soup):
     # Collect relevant columns (UCLA for some reason doesn't include waitlist with status, but we will parse it in the same function for simplicity)
@@ -94,9 +95,11 @@ def _parse_end(event, time_str):
     event.end_time = str(_parse_time_str(time_str))
 
 def _parse_time_str(time_str):
-    if time_str.find(':') > -1: # Time is within the hour
+    if time_str.find(':') > -1:
+        # Time is within the hour
         return datetime.strptime(time_str, '%I:%M%p')
-    else: # Time *is* the hour; for some reason UCLA doesn't standardize timestamps and assumes that 12:00 = 12. We will follow this assumption grudgingly.
+    else: 
+        # Time *is* the hour; for some reason UCLA doesn't standardize timestamps and assumes that 12:00 = 12. We will follow this assumption grudgingly.
         return datetime.strptime(time_str, '%I%p')
 
 def _parse_location(section, section_soup):
