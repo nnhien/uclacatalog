@@ -1,6 +1,6 @@
 '''
 Parses the response from https://sa.ucla.edu/ro/public/soc after sending a request containing
-the subject area and any filters into a list of Section objects
+the course and any filters into a list of Section objects
 '''
 
 from course import Course
