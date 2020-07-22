@@ -16,7 +16,7 @@ GRAD_DIV = "graduate"
 def fetch_courses(subj_area: str, div: str = ALL_DIV) -> List[Course]:
     BASE = 'https://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Details?'
     query = urlparser.urlencode({'SA': subj_area, 'funsel': '3'})
-    return catalogparser.parse_catalog(req.get(BASE + query))
+    return catalogparser.parse_catalog(req.get(BASE + query), subj_area, div)
 
 def fetch_sections(course: Course, options: FilterOptions) -> List[Section]:
     raise NotImplementedError
