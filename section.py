@@ -21,7 +21,6 @@ class Section(Event):
         self.final = Final()
         self.instructors = []
         self.last_updated = 0
-        self.token = ''
 
 
     '''
