@@ -1,3 +1,6 @@
+from course import Course
+import base64
+
 class Event:
     def __init__(self):
         self.meet_days = []
@@ -18,10 +21,18 @@ class Section(Event):
         self.enrolled_max = 0
         self.waitlisted = 0
         self.waitlisted_max = 0
-        self.final = Final()
         self.instructors = []
         self.last_updated = 0
+        self.course = None
 
+class Lecture(Section):
+    def __init__(self):
+        super().__init__()
+        self.final = Final()
+
+class Discussion(Section):
+    def __init__(self):
+        super().__init__()
 
     '''
     See course.py for full documentation on how the UCLA Registrar formats its tokens
@@ -29,12 +40,20 @@ class Section(Event):
     For course sections, tokens are used to fetch discussion sections. They follow mostly the same format as their course
     counterparts, with one difference:
 
-    XXXXA BBID_DEPTXXXXABB
+    XXXXAABBID_DEPTXXXXABB
     
     Where ID is the section ID
     '''
     def get_token(self):
-        NotImplemented
+        if self.course.subj_area == '' or self.course.ctlg_no == '':
+            raise ValueError
+        else:
+            # I am going to commit heresy and call a private function outside of its intended scope, 
+            # but I don't feel like reimplementing function. Sue me.
+            unencoded_token = self.course._get_full_ctlg_no() + self.id + "_" + self.course._get_path()
+            unencoded_token_bytes = unencoded_token.encode('utf-8')
+            base64_token = base64.standard_b64encode(unencoded_token_bytes)
+            return base64_token.decode('utf-8')
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
