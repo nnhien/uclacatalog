@@ -16,6 +16,7 @@ class Final(Event):
 class Section(Event):
     def __init__(self):
         super().__init__()
+        self.course = None
         self.id = 0
         self.sec_no = 0
         self.term = ''
@@ -26,8 +27,8 @@ class Section(Event):
         self.waitlisted = 0
         self.waitlisted_max = 0
         self.instructors = []
+        self.final = Final()
         self.last_updated = 0
-        self.course = None
 
     def to_jsons(self):
         json_obj = json.loads(self.course.to_jsons(self.term))
@@ -54,16 +55,14 @@ class Section(Event):
         if self.course.subj_area == '' or self.course.ctlg_no == '':
             raise ValueError
         else:
-            # I am going to commit heresy and call a private function outside of its intended scope, 
-            # but I don't feel like reimplementing function. Sue me.
-            unencoded_token = self.course._get_full_ctlg_no() + self._get_path()
+            unencoded_token = self.course.get_full_ctlg_no() + self._get_path()
             unencoded_token_bytes = unencoded_token.encode('utf-8')
             base64_token = base64.standard_b64encode(unencoded_token_bytes)
             return base64_token.decode('utf-8')
 
     def _get_path(self):
         # This feels so dirty
-        return self.id + "_" + self.course._get_path()
+        return self.id + "_" + self.course.get_path()
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
