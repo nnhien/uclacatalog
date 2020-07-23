@@ -49,6 +49,12 @@ Therefore, the longest course number is CM999SC, but I haven't been able to find
 def _parse_head(course, course_soup):
     head = course_soup.h3.text.split('. ')
     ctlg_no = head[0]
+
+    '''
+    The resultant tuple takes the form
+
+    (is_concurrent, is_multilisted, ctlg_no, seq_no)
+    '''
     ctlg_no_components = re.findall('(C?)(M?)(\\d+)(\\D*)', ctlg_no)[0]
     course.title = _extract_course_title(head)
     course.is_concurrent = _extract_is_concurrent(ctlg_no_components)
