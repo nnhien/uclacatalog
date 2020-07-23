@@ -56,7 +56,7 @@ def _match_status(section_soup):
     status = section_soup.find("div", class_="statusColumn")
 
     # Use regex match groups to seperate openness from class capacity
-    return re.findall("(Open|Closed|Waitlist)((\\d+ of \\d+ Enrolled)|(Class Full \\(\\d+\\)))", status.text)[0]
+    return re.findall("(Open|Closed|Waitlist)\\D*((\\d+ of \\d+ Enrolled)|(Class Full \\(\\d+\\))?)", status.text)[0]
 
 def _parse_enrollable(section_soup):
     status = _match_status(section_soup)[0]
@@ -66,37 +66,46 @@ def _parse_waitlistable(section_soup):
     status = _match_status(section_soup)[0]
     return status == "Waitlist"
 
+
+
 ''' 
 For matching enrollment and waitlist, we only care about the numbers for matching. 
-Also, there will always be an integer to match for (namely, 0)
-
-The returned tuple always has the structure (current_amt, max_cap)
 '''
 def _parse_enrollment(section_soup):
     enrollment = _match_status(section_soup)[1]
-    groups = re.findall('\\d+', enrollment)
-    return groups[0]
+    groups = re.findall('\\d+?', enrollment)
+    if len(groups) > 0: 
+        return groups[0]
+    else:
+        return 0
 
 def _parse_enrollment_max(section_soup):
     enrollment = _match_status(section_soup)[1]
-    groups = re.findall('\\d+', enrollment)
+    groups = re.findall('\\d+?', enrollment)
     if len(groups) > 1:
         return groups[1]
-    else:
+    elif len(groups) == 0:
+        return 0
+    else: 
         return groups[0]
 
 def _match_waitlisted(section_soup):
     waitlist = section_soup.find("div", class_="waitlistColumn")
-    return re.findall("\\d+", waitlist.text)
+    return re.findall("\\d+?", waitlist.text)
 
 def _parse_waitlisted(section_soup):
     groups = _match_waitlisted(section_soup)
-    return groups[0]
+    if len(groups) > 0:
+        return groups[0]
+    else:
+        return 0
 
 def _parse_waitlisted_max(section_soup):
     groups = _match_waitlisted(section_soup)
     if len(groups) > 1:
         return groups[1]
+    elif len(groups) == 0:
+        return 0
     else:
         return groups[0]
 
