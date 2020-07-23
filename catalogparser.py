@@ -18,9 +18,7 @@ def parse_catalog(resp: str, subj_area: str, div: str) -> List[Course]:
 # TODO: Implement getting all divisions' courses asynchronously
 # TODO: Perhaps also implement a more general function that takes in the response, subject area, and an array of divisions
 def _get_all_div(resp, subj_area):
-    _parse_course_list(resp, subj_area, api.LOWER_DIV)
-    _parse_course_list(resp, subj_area, api.UPPER_DIV)
-    _parse_course_list(resp, subj_area, api.GRAD_DIV)
+    return _parse_course_list(resp, subj_area, api.LOWER_DIV) + _parse_course_list(resp, subj_area, api.UPPER_DIV) + _parse_course_list(resp, subj_area, api.GRAD_DIV)
 
 def _parse_course_list(resp, subj_area, div):
     course_list = []
