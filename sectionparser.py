@@ -66,22 +66,25 @@ def _parse_waitlistable(section_soup):
     status = _match_status(section_soup)[0]
     return status == "Waitlist"
 
-
-
 ''' 
 For matching enrollment and waitlist, we only care about the numbers for matching. 
+
+The result will always either come in a tuple containing (current_num, max_num) or an empty tuple if the course was closed by the department
 '''
-def _parse_enrollment(section_soup):
+def _match_enrollment(section_soup):
     enrollment = _match_status(section_soup)[1]
-    groups = re.findall('\\d+?', enrollment)
+    return re.findall('\\d+', enrollment)
+
+def _parse_enrollment(section_soup):
+    groups = _match_enrollment(section_soup)
     if len(groups) > 0: 
         return groups[0]
     else:
         return 0
 
 def _parse_enrollment_max(section_soup):
-    enrollment = _match_status(section_soup)[1]
-    groups = re.findall('\\d+?', enrollment)
+    groups = _match_enrollment(section_soup)
+    print(groups)
     if len(groups) > 1:
         return groups[1]
     elif len(groups) == 0:
@@ -91,7 +94,7 @@ def _parse_enrollment_max(section_soup):
 
 def _match_waitlisted(section_soup):
     waitlist = section_soup.find("div", class_="waitlistColumn")
-    return re.findall("\\d+?", waitlist.text)
+    return re.findall("\\d+", waitlist.text)
 
 def _parse_waitlisted(section_soup):
     groups = _match_waitlisted(section_soup)
