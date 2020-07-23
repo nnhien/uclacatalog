@@ -21,6 +21,21 @@ class Section(Event):
         self.final = Final()
         self.instructors = []
         self.last_updated = 0
+        self.token = ''
+
+
+    '''
+    See course.py for full documentation on how the UCLA Registrar formats its tokens
+
+    For course sections, tokens are used to fetch discussion sections. They follow mostly the same format as their course
+    counterparts, with one difference:
+
+    XXXXA BBID_DEPTXXXXABB
+    
+    Where ID is the section ID
+    '''
+    def get_token(self):
+        NotImplemented
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)

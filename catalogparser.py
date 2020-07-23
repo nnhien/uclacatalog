@@ -28,7 +28,7 @@ def _parse_course_list(resp, subj_area, div):
     courses_soup = resp_soup.find('div', {'id': div}).find_all('div', class_='media-body')
     for course_soup in courses_soup:
         course = Course()
-        course.dept = subj_area
+        course.subj_area = subj_area
         course.units = _parse_course_units(course_soup)
         course.desc = _parse_course_desc(course_soup)
         _parse_head(course, course_soup)
@@ -52,7 +52,6 @@ def _parse_head(course, course_soup):
     head = course_soup.h3.text.split('. ')
     ctlg_no = head[0]
     ctlg_no_components = re.findall('(C?)(M?)(\\d+)(\\D*)', ctlg_no)[0]
-    print(ctlg_no_components)
     course.title = _extract_course_title(head)
     course.is_concurrent = _extract_is_concurrent(ctlg_no_components)
     course.is_multi_listed = _extract_is_multi_listed(ctlg_no_components)
