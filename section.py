@@ -13,6 +13,10 @@ class Final(Event):
     def __init__(self):
         super().__init__()
 
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
+
+
 class Section(Event):
     def __init__(self):
         super().__init__()
@@ -28,6 +32,10 @@ class Section(Event):
         self.waitlisted_max = 0
         self.instructors = []
         self.final = Final()
+        self.restrictions = ''
+        self.webpage = ''
+        self.grade_type = ''
+        self.notes = []
         self.last_updated = 0
 
     def to_jsons(self):
