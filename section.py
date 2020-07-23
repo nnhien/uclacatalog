@@ -16,7 +16,8 @@ class Section(Event):
     def __init__(self):
         super().__init__()
         self.id = 0
-        self.is_open = False
+        self.enrollable = False
+        self.waitlistable = False
         self.enrolled = 0
         self.enrolled_max = 0
         self.waitlisted = 0
@@ -24,15 +25,6 @@ class Section(Event):
         self.instructors = []
         self.last_updated = 0
         self.course = None
-
-class Lecture(Section):
-    def __init__(self):
-        super().__init__()
-        self.final = Final()
-
-class Discussion(Section):
-    def __init__(self):
-        super().__init__()
 
     '''
     See course.py for full documentation on how the UCLA Registrar formats its tokens

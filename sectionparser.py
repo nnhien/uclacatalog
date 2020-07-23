@@ -14,18 +14,19 @@ import time
 
 def parse_sections(resp, course) -> List[Section]:
     out = []
-    out.extend(_parse_lectures(resp, course))
+    out.extend(_parse_root_sections(resp, course))
     return out
 
-# For our purposes, lectures will be treated the same as labs, since they contain the same metadata
-def _parse_lectures(resp, course):
+# Root sections can be both labs and lectures
+def _parse_root_sections(resp, course):
     out = []
     sections_soup = BeautifulSoup(resp.text, 'lxml').find('div', {'id': re.compile('\\d*-children')})
     sections_arr = sections_soup.find_all("div", class_="class-info")
     for section_soup in sections_arr:
         section = Section()
         section.id = _parse_id(section_soup)
-        section.is_open = _parse_openness(section_soup)
+        section.enrollable = _parse_enrollable(section_soup)
+        section.waitlistable = _parse_waitlistable(section_soup)
         section.enrolled = _parse_enrollment(section_soup)
         section.enrolled_max = _parse_enrollment_max(section_soup)
         section.waitlisted = _parse_waitlisted(section_soup)
@@ -37,10 +38,11 @@ def _parse_lectures(resp, course):
         section.instructors = _parse_instructors(section_soup)
         section.last_updated = int(time.time())
         section.course = course
-        out.append(course)
+        out.append(section)
     return out
 
-def _fetch_discussions():
+# Leaf sections can be both labs or discussions, or just may not exist
+def _fetch_leaf_sections():
     NotImplemented
 
 def _fetch_final():
@@ -56,9 +58,13 @@ def _match_status(section_soup):
     # Use regex match groups to seperate openness from class capacity
     return re.findall("(Open|Closed|Waitlist)((\\d+ of \\d+ Enrolled)|(Class Full \\(\\d+\\)))", status.text)[0]
 
-def _parse_openness(section_soup):
+def _parse_enrollable(section_soup):
     status = _match_status(section_soup)[0]
     return status == "Open"
+
+def _parse_waitlistable(section_soup):
+    status = _match_status(section_soup)[0]
+    return status == "Waitlist"
 
 ''' 
 For matching enrollment and waitlist, we only care about the numbers for matching. 
