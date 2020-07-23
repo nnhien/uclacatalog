@@ -5,8 +5,7 @@ import api
 import re
 
 '''
-Parses the response from https://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Details after sending a
-request containing the subject area 
+Parser for responses from https://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Details
 '''
 
 def parse_catalog(resp: str, subj_area: str, div: str) -> List[Course]:
