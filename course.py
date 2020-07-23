@@ -33,7 +33,7 @@ class Course:
         "Token": get_token() // See below for token format
     }
     '''
-    def to_json(self, term: str):
+    def to_jsons(self, term: str):
         class_flag = 'n'
         if self.is_multi_listed: class_flag = 'y'
         return json.dumps(

@@ -12,19 +12,22 @@ import requests as req
 import re
 import time
 
-def parse_sections(resp, course) -> List[Section]:
+def parse_sections(resp, course, term) -> List[Section]:
     out = []
-    out.extend(_parse_root_sections(resp, course))
+    out.extend(_parse_root_sections(resp, course, term))
     return out
 
 # Root sections can be both labs and lectures
-def _parse_root_sections(resp, course):
+def _parse_root_sections(resp, course, term):
     out = []
     sections_soup = BeautifulSoup(resp.text, 'lxml').find('div', {'id': re.compile('\\d*-children')})
     sections_arr = sections_soup.find_all("div", class_="class-info")
-    for section_soup in sections_arr:
+    for i in range(len(sections_arr)):
+        section_soup = sections_arr[i]
         section = Section()
         section.id = _parse_id(section_soup)
+        section.sec_no = ' ' + str(i).zfill(3) # Why IT decided to format it like this, I have no idea. The interface is full of bad design decisions like these.
+        section.term = term
         section.enrollable = _parse_enrollable(section_soup)
         section.waitlistable = _parse_waitlistable(section_soup)
         section.enrolled = _parse_enrollment(section_soup)
@@ -84,7 +87,6 @@ def _parse_enrollment(section_soup):
 
 def _parse_enrollment_max(section_soup):
     groups = _match_enrollment(section_soup)
-    print(groups)
     if len(groups) > 1:
         return groups[1]
     elif len(groups) == 0:
