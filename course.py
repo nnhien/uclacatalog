@@ -40,12 +40,12 @@ class Course:
             {
                 'Term': term,
                 'SubjectAreaCode': self.subj_area,
-                'CatalogNumber': self._get_full_ctlg_no(),
+                'CatalogNumber': self.get_full_ctlg_no(),
                 'IsRoot': True,
                 'SessionGroup': '%',
                 'ClassNumber': '%',
                 'SequenceNumber': None,
-                'Path': self._get_path(),
+                'Path': self.get_path(),
                 'MultiListedClassFlag': class_flag,
                 'Token': self.get_token()
             }
@@ -78,13 +78,13 @@ class Course:
         if self.subj_area == '' or self.ctlg_no == '':
             raise ValueError
         else:
-            unencoded_token = self._get_full_ctlg_no() + self._get_path()
+            unencoded_token = self.get_full_ctlg_no() + self.get_path()
 
             unencoded_bytes = unencoded_token.encode('utf-8')
             base64_token_bytes = base64.standard_b64encode(unencoded_bytes)
             return base64_token_bytes.decode('utf-8')
 
-    def _get_padded_ctlg_no(self):
+    def get_padded_ctlg_no(self):
         return self.ctlg_no.zfill(4)
 
     def _get_padded_seq_no(self):
@@ -114,11 +114,11 @@ class Course:
     def _get_unspaced_subj_area(self):
         return self.subj_area.replace(' ', '')
 
-    def _get_full_ctlg_no(self):
-        return self._get_padded_ctlg_no() + self._get_padded_seq_no() + self._get_padded_conventions()
+    def get_full_ctlg_no(self):
+        return self.get_padded_ctlg_no() + self._get_padded_seq_no() + self._get_padded_conventions()
 
-    def _get_path(self):
-        return self._get_unspaced_subj_area() + self._get_padded_ctlg_no() + self._get_padded_seq_no().strip() + self._get_padded_conventions().strip()
+    def get_path(self):
+        return self._get_unspaced_subj_area() + self.get_padded_ctlg_no() + self._get_padded_seq_no().strip() + self._get_padded_conventions().strip()
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
