@@ -12,8 +12,9 @@ import requests as req
 import re
 import time
 
-def parse_sections(sections_soup) -> List[Section]:
+def parse_sections(resp) -> List[Section]:
     out = []
+    sections_soup = BeautifulSoup(resp.text, 'lxml').find('div', {'id': re.compile('\\d*-children')})
     sections_arr = sections_soup.find_all("div", class_="class-info")
     for section_soup in sections_arr:
         section = Section()
