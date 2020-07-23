@@ -20,10 +20,10 @@ class Final(Event):
 class Section(Event):
     def __init__(self):
         super().__init__()
-        self.course = None
         self.id = 0
         self.sec_no = 0
         self.term = ''
+        self.type = ''
         self.enrollable = False
         self.waitlistable = False
         self.enrolled = 0
@@ -31,12 +31,14 @@ class Section(Event):
         self.waitlisted = 0
         self.waitlisted_max = 0
         self.instructors = []
-        self.final = Final()
+        self.final = None
         self.restrictions = ''
         self.webpage = ''
         self.grade_type = ''
         self.notes = []
         self.last_updated = 0
+        self.course = None
+        self.children = []
 
     def to_jsons(self):
         json_obj = json.loads(self.course.to_jsons(self.term))

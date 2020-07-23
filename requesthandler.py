@@ -9,6 +9,11 @@ def fetch_root_sections(course, options, term):
     BASE = 'https://sa.ucla.edu/ro/Public/SOC/Results/GetCourseSummary?'
     return req.get(BASE, params={'model': course.to_jsons(term), 'FilterFlags': default_filters})
 
+def fetch_leaf_sections(section, options, term):
+    default_filters = '{"enrollment_status":"O,W,C,X,T,S","advanced":"y","meet_days":"M,T,W,R,F","start_time":"8:00 am","end_time":"8:00 pm","meet_locations":null,"meet_units":null,"instructor":null,"class_career":null,"impacted":null,"enrollment_restrictions":null,"enforced_requisites":null,"individual_studies":null,"summer_session":null}'
+    BASE = 'https://sa.ucla.edu/ro/Public/SOC/Results/GetCourseSummary?'
+    return req.get(BASE, params={'model': section.to_jsons(), 'FilterFlags': default_filters})
+
 def fetch_section_detail(section):
     BASE = 'https://sa.ucla.edu/ro/Public/SOC/Results/ClassDetailTooltip?'
     query = {

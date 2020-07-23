@@ -16,48 +16,65 @@ the course and any filters into a list of Section objects
 def parse_sections(resp, course, term) -> List[Section]:
     out = []
     out.extend(_parse_root_sections(resp, course, term))
+    for section in out:
+        section.children = _parse_leaf_sections(requesthandler.fetch_leaf_sections(section, None, term), section)
     return out
 
-# Root sections can be both labs and lectures
 def _parse_root_sections(resp, course, term):
     out = []
     sections_soup = BeautifulSoup(resp.text, 'lxml').find('div', {'id': re.compile('\\d*-children')})
     sections_arr = sections_soup.find_all("div", class_="class-info")
     for i in range(len(sections_arr)):
         section_soup = sections_arr[i]
-        section = Section()
-        section.id = _parse_id(section_soup)
-        section.sec_no = ' ' + str(i + 1).zfill(3) # Why IT decided to format it like this, I have no idea. The interface is full of bad design decisions like these.
-        section.term = term
-        section.enrollable = _parse_enrollable(section_soup)
-        section.waitlistable = _parse_waitlistable(section_soup)
-        section.enrolled = _parse_enrollment(section_soup)
-        section.enrolled_max = _parse_enrollment_max(section_soup)
-        section.waitlisted = _parse_waitlisted(section_soup)
-        section.waitlisted_max = _parse_waitlisted_max(section_soup)
-        section.meet_days = _parse_days(section_soup)
-        section.start_time = str(_parse_start(section_soup))
-        section.end_time = str(_parse_end(section_soup))
-        section.location = _parse_location(section_soup)
-        section.instructors = _parse_instructors(section_soup)
-        section.last_updated = int(time.time())
-        section.course = course
-
-        detail_resp = requesthandler.fetch_section_detail(section)
-        detail_soup = BeautifulSoup(detail_resp.text, 'lxml')
-
-        section.restrictions = _parse_detail_restrictions(detail_soup)
-        section.webpage = _parse_detail_webpage(detail_soup)
-        section.grade_type = _parse_detail_gradetype(detail_soup)
-        section.final = _parse_detail_final(detail_soup)
-        section.notes = _parse_detail_notes(detail_soup)
-
+        section = _populate_section(section_soup, course, term)
+        # Why IT decided to format the section number like this and actually strictly enforce its format on the backend, I have no idea. 
+        # The interface is full of bad design decisions like these.
+        section.sec_no = ' ' + str(i + 1).zfill(3)
+        _parse_section_details(section)
         out.append(section)
     return out
 
 # Leaf sections can be both labs or discussions, or just may not exist
-def _fetch_leaf_sections():
-    NotImplemented
+def _parse_leaf_sections(resp, parent):
+    out = []
+    sections_soup = BeautifulSoup(resp.text, 'lxml').find('div', {'id': re.compile('\\d*-children')})
+    sections_arr = sections_soup.find_all("div", class_="class-info")
+    for section_soup in sections_arr:
+        section = _populate_section(section_soup, parent.course, parent.term)
+        section.sec_no = parent.sec_no
+        _parse_section_details(section)
+        out.append(section)
+    return out
+
+def _populate_section(section_soup, course, term):
+    section = Section()
+    section.id = _parse_id(section_soup)
+    section.term = term
+    section.type = _parse_type(section_soup)
+    section.waitlistable = _parse_waitlistable(section_soup)
+    section.enrollable = _parse_enrollable(section_soup)
+    section.enrolled = _parse_enrollment(section_soup)
+    section.enrolled_max = _parse_enrollment_max(section_soup)
+    section.waitlisted = _parse_waitlisted(section_soup)
+    section.waitlisted_max = _parse_waitlisted_max(section_soup)
+    section.meet_days = _parse_days(section_soup)
+    section.start_time = str(_parse_start(section_soup))
+    section.end_time = str(_parse_end(section_soup))
+    section.location = _parse_location(section_soup)
+    section.instructors = _parse_instructors(section_soup)
+    section.last_updated = int(time.time())
+    section.course = course
+    return section
+
+def _parse_section_details(section):
+    detail_resp = requesthandler.fetch_section_detail(section)
+    detail_soup = BeautifulSoup(detail_resp.text, 'lxml')
+
+    section.restrictions = _parse_detail_restrictions(detail_soup)
+    section.webpage = _parse_detail_webpage(detail_soup)
+    section.grade_type = _parse_detail_gradetype(detail_soup)
+    section.final = _parse_detail_final(detail_soup)
+    section.notes = _parse_detail_notes(detail_soup)
 
 def _parse_id(section_soup):
     # ID Attribute is in format of ID_subjAreaCLASSNUM; we want to split at '_' and take the first element
@@ -68,6 +85,18 @@ def _match_status(section_soup):
 
     # Use regex match groups to seperate openness from class capacity
     return re.findall("(Open|Closed|Waitlist)\\D*((\\d+ of \\d+ Enrolled)|(Class Full \\(\\d+\\))?)", status.text)[0]
+
+def _parse_type(section_soup):
+    type_soup = section_soup.find('div', class_='sectionColumn')
+    sec_type = type_soup.text
+    if 'Lec' in sec_type:
+        return 'lecture'
+    elif 'Dis' in sec_type:
+        return 'discussion'
+    elif 'Lab' in sec_type:
+        return 'lab'
+    else:
+        raise ValueError
 
 def _parse_enrollable(section_soup):
     status = _match_status(section_soup)[0]
