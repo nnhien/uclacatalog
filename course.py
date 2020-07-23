@@ -23,8 +23,7 @@ class Course:
         "CatalogNumber": XXXXAABB, // See token specification
         "IsRoot": true/false, // true if requesting lecture sections, false if requesting discussion sections
 
-        // For the next three, the values are always the same. I'm not sure what their purpose is, but they're required in the object
-        // or else the request will fail.
+        // For the next three, the values are always the same for fetching top level sections
         "SessionGroup": "%",
         "ClassNumber": "%",
         "SequenceNumber": null,
@@ -34,7 +33,7 @@ class Course:
         "Token": get_token() // See below for token format
     }
     '''
-    def get_json_model(self, term: str):
+    def to_json(self, term: str):
         class_flag = 'n'
         if self.is_multi_listed: class_flag = 'y'
         return json.dumps(
