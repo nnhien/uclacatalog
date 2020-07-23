@@ -1,5 +1,9 @@
 import requests as req
 
+'''
+Handles requests to the necessary UCLA pages to scrape data from.
+'''
+
 def fetch_courses(subj_area, div):
     BASE = 'https://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Details?'
     return req.get(BASE, params={'SA': subj_area, 'funsel': '3'})

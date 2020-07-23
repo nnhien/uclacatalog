@@ -9,8 +9,7 @@ import time
 import requesthandler
 
 '''
-Parses the response from https://sa.ucla.edu/ro/public/soc after sending a request containing
-the course and any filters into a list of Section objects
+Parser for responses from https://sa.ucla.edu/ro/public/soc and 
 '''
 
 def parse_sections(resp, course, term) -> List[Section]:

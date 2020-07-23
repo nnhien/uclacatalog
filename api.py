@@ -198,9 +198,6 @@ LEGAL_SA = {
     "YIDDSH"
 }
 
-# Note that courses do not include their sections; doing so by default is very
-# resource intensive. If sections are desired, use the appropriate funciton
-
 # Returns a list of all courses in the specified division for the specified subject area
 def fetch_catalog(subj_area: str, div: str = ALL_DIV) -> List[Course]:
     subj_area = subj_area.upper()

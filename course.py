@@ -1,6 +1,18 @@
 import base64
 import json
 
+'''
+Model containing information for courses
+
+subj_area:          (string)        A legal subject area as specified in api.py
+ctlg_no:            (string)        The integer component of a catalog number
+seq_no:             (string)        If course is part of a sequence (e.g MATH31A/B, A and B are sequence numbers), contains the sequence number
+title:              (string)        Title of the course
+desc:               (string)        Description for the course
+units               (string)        Number of units yielded by the course
+is_concurrent:      (boolean)       Whether or not the course yields concurrent credits (see https://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Numbering-and-Description-Guide)
+is_multi_listed:    (boolean)       Whether or not the course is offered jointly with another department (see https://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Numbering-and-Description-Guide)
+'''
 class Course:
     def __init__(self):
         self.subj_area = ''
