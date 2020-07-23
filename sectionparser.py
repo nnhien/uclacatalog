@@ -41,7 +41,7 @@ def _parse_lectures(resp, course):
     return out
 
 def _fetch_discussions():
-     NotImplemented
+    NotImplemented
 
 def _fetch_final():
     NotImplemented
