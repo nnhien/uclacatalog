@@ -15,6 +15,18 @@ def parse_catalog(resp: str, subj_area: str, div: str) -> List[Course]:
     else: 
         return _parse_course_list(resp, subj_area, div)
 
+def find_course(resp: str, subj_area: str, ctlg_no: str) -> List[Course]:
+    resp_soup = BeautifulSoup(resp.text, 'lxml')
+    courses_soup = resp_soup.find_all('div', class_='media-body')
+    matched_courses = []
+    for course_soup in courses_soup:
+        course_head_soup = course_soup.h3
+        if ctlg_no in course_head_soup.text:
+            course = _populate_course(course_soup, subj_area)
+            matched_courses.append(course)
+    return matched_courses
+
+
 # TODO: Implement getting all divisions' courses asynchronously
 # TODO: Perhaps also implement a more general function that takes in the response, subject area, and an array of divisions
 def _get_all_div(resp, subj_area):
@@ -25,14 +37,19 @@ def _parse_course_list(resp, subj_area, div):
     resp_soup = BeautifulSoup(resp.text, 'lxml')
     courses_soup = resp_soup.find('div', {'id': div}).find_all('div', class_='media-body')
     for course_soup in courses_soup:
-        course = Course()
-        course.subj_area = subj_area
-        course.units = _parse_course_units(course_soup)
-        course.desc = _parse_course_desc(course_soup)
-        _parse_head(course, course_soup)
+        course = _populate_course(course_soup, subj_area)
         course_list.append(course)
     return course_list
         
+
+def _populate_course(course_soup, subj_area):
+    course = Course()
+    course.subj_area = subj_area
+    course.units = _parse_course_units(course_soup)
+    course.desc = _parse_course_desc(course_soup)
+    _parse_head(course, course_soup)
+    return course
+
 
 '''
 Title and catalog numbers are enclosed in one h3 tag.
