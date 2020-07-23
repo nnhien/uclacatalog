@@ -1,13 +1,13 @@
 class Course:
     def __init__(self):
         self.dept = ''
-        self.ctlg_no = ''
+        self.ctlg_no = 0
+        self.seq_no = ''
         self.title = ''
         self.desc = ''
         self.units = ''
         self.is_concurrent = False
         self.is_multi_listed = False
-        self.is_lab = False
         self.token = ''
 
     def set_token(self):

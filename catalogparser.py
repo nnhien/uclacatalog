@@ -43,21 +43,21 @@ The Registrar specifies course numbering conventions at https://www.registrar.uc
 Noteably:
 - Courses that are credited concurrently between undergrad and grad are prefaced with C
 - Courses that are administered between different departments are prefaced with M
-- Courses that are labs (for engineering) are appended with L
-- Courses that are individual study are appended with S, but if it's part of a series it's put before the series letter
+- Courses that are individual study are appended with S, but if it's part of a sequence it's put before the sequence number
 - C always comes before M
 
-Therefore, the longest course number is CM999SCL, but I haven't been able to find one with all the conventions.
+Therefore, the longest course number is CM999SC, but I haven't been able to find one with all the conventions.
 '''
 def _parse_head(course, course_soup):
     head = course_soup.h3.text.split('. ')
     ctlg_no = head[0]
-    ctlg_no_components = re.findall('(C?)(M?)(\\d+[^L]+)(L?)', ctlg_no)[0]
+    ctlg_no_components = re.findall('(C?)(M?)(\\d+)(\\D*)', ctlg_no)[0]
+    print(ctlg_no_components)
     course.title = _extract_course_title(head)
     course.is_concurrent = _extract_is_concurrent(ctlg_no_components)
     course.is_multi_listed = _extract_is_multi_listed(ctlg_no_components)
     course.ctlg_no = _extract_ctlg_no(ctlg_no_components)
-    course.is_lab = _extract_is_lab(ctlg_no_components)
+    course.seq_no =  _extract_seq_no(ctlg_no_components)
     
 def _extract_course_title(head):
     return head[1]
@@ -71,8 +71,9 @@ def _extract_is_multi_listed(ctlg_no_comp):
 def _extract_ctlg_no(ctlg_no_comp):
     return ctlg_no_comp[2]
 
-def _extract_is_lab(ctlg_no_comp):
-    return ctlg_no_comp[3] != ''
+def _extract_seq_no(ctlg_no_comp):
+    return ctlg_no_comp[3]
+
 
 '''
 Course units is not always an integer (sometimes the registrar specifies a range like '1.0 to 4.0')
