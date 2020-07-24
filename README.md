@@ -1,3 +1,3 @@
-# UCLA Catalog API
+# UCLA Catalog
 
 # TODO: Add a readme
