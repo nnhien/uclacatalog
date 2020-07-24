@@ -44,7 +44,7 @@ final:          (Final)         An object containing information about the final
 restrictions:   (string)        Any restrictions needed to be fulfilled to enroll (Not prerequisites)
 webpage:        (string)        A URL to the section's website
 grade_type:     (string)        Whether the class is P/NP, Letter Graded, or Not Graded
-notes:          (string)        Notes specified by the department or registrar
+notes:          (List[string])        Notes specified by the department or registrar
 children:       (List[Section]) Children sections (e.g Discussion or lab sections for lectures)
 last_updated:   (int)           Unix timestamp for which enrolled and waitlisted was accurate
 '''
