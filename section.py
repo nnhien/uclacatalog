@@ -85,7 +85,7 @@ class Section(Event):
     '''
     See course.py for full documentation on how the UCLA Registrar formats its tokens
 
-    For course sections, tokens are used to fetch discussion sections. They follow mostly the same format as their course
+    For course sections, tokens are used to fetch child sections. They follow mostly the same format as their course
     counterparts, with one difference:
 
     XXXXAABBID_DEPTXXXXABB
