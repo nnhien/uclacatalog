@@ -22,15 +22,16 @@ def parse_sections(resp, course, term) -> List[Section]:
 def _parse_root_sections(resp, course, term):
     out = []
     sections_soup = BeautifulSoup(resp.text, 'lxml').find('div', {'id': re.compile('\\d*-children')})
-    sections_arr = sections_soup.find_all("div", class_="class-info")
-    for i in range(len(sections_arr)):
-        section_soup = sections_arr[i]
-        section = _populate_section(section_soup, course, term)
-        # Why IT decided to format the section number like this and actually strictly enforce its format on the backend, I have no idea. 
-        # The interface is full of bad design decisions like these.
-        section.sec_no = ' ' + str(i + 1).zfill(3)
-        _parse_section_details(section)
-        out.append(section)
+    if sections_soup is not None:
+        sections_arr = sections_soup.find_all("div", class_="class-info")
+        for i in range(len(sections_arr)):
+            section_soup = sections_arr[i]
+            section = _populate_section(section_soup, course, term)
+            # Why IT decided to format the section number like this and actually strictly enforce its format on the backend, I have no idea. 
+            # The interface is full of bad design decisions like these.
+            section.sec_no = ' ' + str(i + 1).zfill(3)
+            _parse_section_details(section)
+            out.append(section)
     return out
 
 # Leaf sections can be both labs or discussions, or just may not exist
@@ -57,8 +58,8 @@ def _populate_section(section_soup, course, term):
     section.waitlisted = _parse_waitlisted(section_soup)
     section.waitlisted_max = _parse_waitlisted_max(section_soup)
     section.meet_days = _parse_days(section_soup)
-    section.start_time = str(_parse_start(section_soup))
-    section.end_time = str(_parse_end(section_soup))
+    section.start_time = time.mktime(_parse_start(section_soup).timetuple())
+    section.end_time = time.mktime(_parse_end(section_soup).timetuple())
     section.location = _parse_location(section_soup)
     section.instructors = _parse_instructors(section_soup)
     section.last_updated = int(time.time())
@@ -169,11 +170,11 @@ def _parse_start_end(section_soup):
 
 def _parse_start(section_soup):
     start_str = _parse_start_end(section_soup)[0]
-    return _parse_time_str(start_str)
+    return _parse_time_str(start_str).replace(year=1970)
 
 def _parse_end(section_soup):
     end_str = _parse_start_end(section_soup)[1]
-    return _parse_time_str(end_str)
+    return _parse_time_str(end_str).replace(year=1970)
 
 def _parse_time_str(time_str):
     if time_str.find(':') > -1:
