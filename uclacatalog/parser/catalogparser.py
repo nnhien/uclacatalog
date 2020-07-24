@@ -1,7 +1,7 @@
 from typing import List
-from model.course import Course
+from uclacatalog.model.course import Course
 from bs4 import BeautifulSoup
-import api
+import uclacatalog.api as api
 import re
 
 '''

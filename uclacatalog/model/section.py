@@ -1,4 +1,4 @@
-from model.course import Course
+from uclacatalog.model.course import Course
 import base64
 import json
 

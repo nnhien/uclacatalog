@@ -1,12 +1,12 @@
-from model.course import Course
-from model.section import Section, Final
+from uclacatalog.model.course import Course
+from uclacatalog.model.section import Section, Final
 from bs4 import BeautifulSoup
 from datetime import datetime, date, timedelta
 from typing import List
 import requests as req
+import uclacatalog.requesthandler as requesthandler
 import re
 import time
-import requesthandler
 
 '''
 Parser for responses from https://sa.ucla.edu/ro/public/soc
