@@ -207,7 +207,7 @@ def fetch_catalog(subj_area: str, div: str = ALL_DIV) -> List[Course]:
         raise ValueError(subj_area + ' not a legal subject area!')
 
 # Returns list of courses in the specified subject area with a matching inputted catalog number
-def fetch_matching_courses(subj_area: str, ctlg_no: int) -> List[Course]:
+def fetch_matching_courses(subj_area: str, ctlg_no: str) -> List[Course]:
     subj_area = subj_area.upper()
     if subj_area in LEGAL_SA:
         return catalogparser.find_course(requesthandler.fetch_courses(subj_area, ALL_DIV), subj_area, ctlg_no)
@@ -215,6 +215,6 @@ def fetch_matching_courses(subj_area: str, ctlg_no: int) -> List[Course]:
         raise ValueError(subj_area + ' not a legal subject area!')
 
 # NOTE: Currently the options parameter is ignored. It is specified to provide a stable API since it will eventually be supported
-# Returns a list of root level sections for the specified course
-def fetch_sections(course: Course, options: FilterOptions, term: str) -> List[Section]:
+# Returns a list of root level sections for the specified course, or an empty list if no sections could be found
+def fetch_sections(course: Course, term: str, options: FilterOptions) -> List[Section]:
     return sectionparser.parse_sections(requesthandler.fetch_root_sections(course, options, term), course, term)
