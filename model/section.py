@@ -1,4 +1,4 @@
-from course import Course
+from model.course import Course
 import base64
 import json
 

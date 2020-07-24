@@ -1,5 +1,5 @@
-from course import Course
-from section import Section, Final
+from model.course import Course
+from model.section import Section, Final
 from bs4 import BeautifulSoup
 from datetime import datetime, date, timedelta
 from typing import List
@@ -9,7 +9,7 @@ import time
 import requesthandler
 
 '''
-Parser for responses from https://sa.ucla.edu/ro/public/soc and 
+Parser for responses from https://sa.ucla.edu/ro/public/soc
 '''
 
 def parse_sections(resp, course, term) -> List[Section]:

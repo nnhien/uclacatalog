@@ -1,9 +1,9 @@
 from typing import List
-from course import Course
-from section import Section
-from filteroptions import FilterOptions
-import catalogparser
-import sectionparser
+from model.course import Course
+from model.section import Section
+from model.filteroptions import FilterOptions
+import parser.catalogparser as catalogparser
+import parser.sectionparser as sectionparser
 import requesthandler
 
 ALL_DIV = "all"

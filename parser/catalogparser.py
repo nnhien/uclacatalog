@@ -1,5 +1,5 @@
 from typing import List
-from course import Course
+from model.course import Course
 from bs4 import BeautifulSoup
 import api
 import re
