@@ -7,13 +7,15 @@ While [UCB](https://old.reddit.com/r/ucla/comments/hcqyrt/a_psa_to_ucla_students
 This library aims to make it less of a hassle for UCLA student developers to access details about courses and their related sections.
 
 ## Contributing
-The foundation of this library was built in less than a week with little founding knowledge of Python. Therefore, there will be lots of code that doesn't follow Python conventions or functions that are inefficient. Feel free to contribute by fixing bugs or adding additional features. 
+The foundation of this library was built in less than a week with little initial knowledge of Python. Therefore, there will be lots of code that doesn't follow Python conventions and functions that are inefficient. Feel free to contribute by fixing bugs, making things more efficient, and/or expanding the information given by the models. 
 
 Bugs should be reported to the [issue tracker](https://github.com/nnhien/uclacatalog/issues).
 
-Note that additional features should strictly expand the amount of information that the models provide. Any additional parsing should be done within the application that uses this library.
-
 ## Usage
+
+### Installation
+`pip install uclacatalog`
+
 See the [wiki](https://github.com/nnhien/uclacatalog/wiki) for documentation
 
 ## License
