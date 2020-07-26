@@ -2,7 +2,7 @@
 A Python library to retrieve course and section information from the UCLA Registrar
 
 ## Why
-While [UCB](https://old.reddit.com/r/ucla/comments/hcqyrt/a_psa_to_ucla_students_from_the_berkeley_community/) has [BerkeleyTime](https://berkeleytime.com) and UCSD has their own in-house API that students may use to request course and section information, UCLA has no such service. In fact, course numbers, titles, descriptions, and information about sections are spread between two different domains and three paths, one of which only responds properly if you spoof a request header. Not only this, but there is no documentation for the archaic and inconsistent modeling that the backend will respond to, making the lives of student developers who want to create services that allow their classmates to access course and section information unnecessarily difficult.
+While [UCB](https://old.reddit.com/r/ucla/comments/hcqyrt/a_psa_to_ucla_students_from_the_berkeley_community/) has [BerkeleyTime](https://berkeleytime.com) and UCSD has their own in-house API that students may use to request course and section information, UCLA has no such service. In fact, course numbers, titles, descriptions, and information about sections are spread between two different domains, one of which only responds properly if you spoof a request header. Not only this, but there is no documentation for the archaic and inconsistent modeling that the backend will respond to, making the lives of student developers who want to create services that allow their classmates to access course and section information unnecessarily difficult.
 
 This library aims to make it less of a hassle for UCLA student developers to access details about courses and their related sections.
 
