@@ -1,7 +1,6 @@
 from typing import List
 from uclacatalog.model.course import Course
 from uclacatalog.model.section import Section
-from uclacatalog.model.filteroptions import FilterOptions
 import uclacatalog.parser.catalogparser as catalogparser
 import uclacatalog.parser.sectionparser as sectionparser
 import requesthandler
@@ -214,7 +213,6 @@ def fetch_matching_courses(subj_area: str, ctlg_no: str) -> List[Course]:
     else:
         raise ValueError(subj_area + ' not a legal subject area!')
 
-# NOTE: Currently the options parameter is ignored. It is specified to provide a stable API since it will eventually be supported
 # Returns a list of root level sections for the specified course, or an empty list if no sections could be found
-def fetch_sections(course: Course, term: str, options: FilterOptions) -> List[Section]:
-    return sectionparser.parse_sections(requesthandler.fetch_root_sections(course, options, term), course, term)
+def fetch_sections(course: Course, term: str) -> List[Section]:
+    return sectionparser.parse_sections(requesthandler.fetch_root_sections(course, term), course, term)
