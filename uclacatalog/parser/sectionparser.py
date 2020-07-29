@@ -1,15 +1,15 @@
-from uclacatalog.model.course import Course
-from uclacatalog.model.section import Section, Final
 from bs4 import BeautifulSoup
 from datetime import datetime, date, timedelta
 from typing import List
+from uclacatalog.model import Course
+from uclacatalog.model import Section, Final
+from uclacatalog import requesthandler
 import requests as req
-import uclacatalog.requesthandler as requesthandler
 import re
 import time
 
 '''
-Parser for responses from https://sa.ucla.edu/ro/public/soc
+Parser for responses from https://sa.ucla.edu/ro/public/soc (schedule of classes)
 '''
 
 def parse_sections(resp, course, term) -> List[Section]:

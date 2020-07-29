@@ -1,9 +1,7 @@
 from typing import List
-from uclacatalog.model.course import Course
-from uclacatalog.model.section import Section
-import uclacatalog.parser.catalogparser as catalogparser
-import uclacatalog.parser.sectionparser as sectionparser
-import requesthandler
+from .model import Course, Section
+from .parser import catalogparser, sectionparser
+from . import requesthandler
 
 ALL_DIV = "all"
 LOWER_DIV = "lower"
