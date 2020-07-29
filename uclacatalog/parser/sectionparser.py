@@ -95,6 +95,8 @@ def _parse_type(section_soup):
         return 'discussion'
     elif 'Lab' in sec_type:
         return 'lab'
+    elif 'Sem' in sec_type:
+        return 'seminar'
     else:
         raise ValueError
 
