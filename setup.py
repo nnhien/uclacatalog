@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="uclacatalog",
-    version="1.0.1",
+    version="1.1.0",
     author="Nicholas Nhien",
     author_email="nknhien@ucla.edu",
     description="A Python library to retrieve course and section information from the UCLA Registrar",
