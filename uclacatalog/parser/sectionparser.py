@@ -16,7 +16,7 @@ def parse_sections(resp, course, term) -> List[Section]:
     out = []
     out.extend(_parse_root_sections(resp, course, term))
     for section in out:
-        section.children = _parse_leaf_sections(requesthandler.fetch_leaf_sections(section, None, term), section)
+        section.children = _parse_leaf_sections(requesthandler.fetch_leaf_sections(section, term), section)
     return out
 
 def _parse_root_sections(resp, course, term):
