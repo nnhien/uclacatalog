@@ -27,9 +27,7 @@ def _parse_root_sections(resp, course, term):
         for i in range(len(sections_arr)):
             section_soup = sections_arr[i]
             section = _populate_section(section_soup, course, term)
-            # Why IT decided to format the section number like this and actually strictly enforce its format on the backend, I have no idea. 
-            # The interface is full of bad design decisions like these.
-            section.sec_no = ' ' + str(i + 1).zfill(3)
+            section.sec_no = _parse_sec_no(section_soup)
             _parse_section_details(section)
             out.append(section)
     return out
@@ -69,7 +67,7 @@ def _populate_section(section_soup, course, term):
 def _parse_section_details(section):
     detail_resp = requesthandler.fetch_section_detail(section)
     detail_soup = BeautifulSoup(detail_resp.text, 'lxml')
-
+    
     section.restrictions = _parse_detail_restrictions(detail_soup)
     section.webpage = _parse_detail_webpage(detail_soup)
     section.grade_type = _parse_detail_gradetype(detail_soup)
@@ -99,6 +97,14 @@ def _parse_type(section_soup):
         return 'seminar'
     else:
         raise ValueError
+
+def _parse_sec_no(section_soup):
+    type_soup = section_soup.find('div', class_='sectionColumn')
+    sec_type = type_soup.find('div', class_='hide-above-small').text.strip()
+    match = re.findall('(\\D*)(\\d*)', sec_type)[0]
+    # Why IT decided to format the section number like this and actually strictly enforce its format on the backend, I have no idea. 
+    # The interface is full of bad design decisions like these.
+    return str.format(' {0}', str(match[1]).zfill(3))
 
 def _parse_enrollable(section_soup):
     status = _match_status(section_soup)[0]
