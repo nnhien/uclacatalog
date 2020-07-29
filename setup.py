@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="uclacatalog",
-    version="1.0.0",
+    version="1.0.1",
     author="Nicholas Nhien",
     author_email="nknhien@ucla.edu",
     description="A Python library to retrieve course and section information from the UCLA Registrar",
@@ -20,6 +20,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
         "Topic :: Internet :: WWW/HTTP :: Indexing/Search"
     ],
-    install_requires=['beautifulsoup', 'lxml', 'requests'],
+    install_requires=['beautifulsoup4', 'lxml', 'requests'],
     python_requires='>=3.6',
 )
