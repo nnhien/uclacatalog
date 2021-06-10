@@ -19,4 +19,4 @@ Bugs should be reported to the [issue tracker](https://github.com/nnhien/uclacat
 See the [wiki](https://github.com/nnhien/uclacatalog/wiki) for documentation
 
 ## License
-This project is licensed under AGPLv3 and is free (both as in no-cost and freedom) software. Thus, you are free to modify, use, and distribute this library for whatever purposes you like on the condition that your use be also licensed under AGPLv3, whether or not your application is shipped in a binary form or is used over the internet. An important implication of this is that if requested by an end-user, you must supply the source code for your application to them. The full terms of this license can be found [here](https://github.com/nnhien/uclacatalog/blob/master/LICENSE).
+This project is licensed under [LGPLv3](https://github.com/nnhien/uclacatalog/blob/master/LICENSE) and is free (both as in no-cost and freedom) software. Thus, you are free to modify, distribute and use this library "as-is" for whatever purposes you like, including as part of a larger work. If you modify this library, you must clearly publish modifications.
