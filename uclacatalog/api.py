@@ -1,12 +1,26 @@
-from typing import List
+import enum
+from typing import List, Union
+
+from . import requesthandler
 from .model import Course, Section
 from .parser import catalogparser, sectionparser
-from . import requesthandler
 
+# Keep these around for backwards compatibility, probably
 ALL_DIV = "all"
 LOWER_DIV = "lower"
 UPPER_DIV = "upper"
 GRAD_DIV = "graduate"
+
+
+# Added this as a better practice to module-level constants
+# Enums are more intuitive and easier to filter with IntelliSense
+class Division(enum.Enum):
+    """Enum of course divisions to filter by."""
+    ALL = ALL_DIV
+    LOWER = LOWER_DIV
+    UPPER = UPPER_DIV
+    GRAD = GRAD_DIV
+
 
 LEGAL_SA = {
     "AERO ST",
@@ -196,14 +210,26 @@ LEGAL_SA = {
 }
 
 # Returns a list of all courses in the specified division for the specified subject area
-def fetch_catalog(subj_area: str, div: str = ALL_DIV) -> List[Course]:
+
+
+def fetch_catalog(subj_area: str,
+                  div: Union[Division, str] = Division.ALL  # type: ignore
+                  ) -> List[Course]:
+    # Normalize args
     subj_area = subj_area.upper()
+    if isinstance(div, Division):
+        div: str = div.value
+
+    # Return requested content if subject is valid
     if subj_area in LEGAL_SA:
-        return catalogparser.parse_catalog(requesthandler.fetch_courses(subj_area, div), subj_area, div)
+        courses_resp = requesthandler.fetch_courses(subj_area, div)
+        return catalogparser.parse_catalog(courses_resp, subj_area, div)
     else:
         raise ValueError(subj_area + ' not a legal subject area!')
 
 # Returns list of courses in the specified subject area with a matching inputted catalog number
+
+
 def fetch_matching_courses(subj_area: str, ctlg_no: str) -> List[Course]:
     subj_area = subj_area.upper()
     if subj_area in LEGAL_SA:
@@ -212,5 +238,7 @@ def fetch_matching_courses(subj_area: str, ctlg_no: str) -> List[Course]:
         raise ValueError(subj_area + ' not a legal subject area!')
 
 # Returns a list of root level sections for the specified course, or an empty list if no sections could be found
+
+
 def fetch_sections(course: Course, term: str) -> List[Section]:
     return sectionparser.parse_sections(requesthandler.fetch_root_sections(course, term), course, term)
